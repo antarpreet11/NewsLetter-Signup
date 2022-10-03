@@ -38,13 +38,25 @@ app.post('/', (req, res) => {
     }
 
     const request = https.request(url, options, (response) => {
-        response.on('data', (d) => {
-            console.log(JSON.parse(d))
-        })
+
+        if(response.statusCode === 200) {
+            res.sendFile(__dirname + '/frontend/success.html')
+        }
+        else {
+            res.sendFile(__dirname + '/frontend/failure.html')
+        }
+
+        // response.on('data', (d) => {
+        //     console.log(JSON.parse(d))
+        // })
     })
 
     request.write(jsonData)
     request.end()
+})
+
+app.post('/failure', (req, res) => {
+    res.redirect('/')
 })
 
 app.listen(3000, () => {
